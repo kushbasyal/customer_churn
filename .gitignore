@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+.virtual_documents/
+
+# IDEs
+.vscode/
+.idea/
+
+# Data outputs
+#data/cleaned_customer_data.csv
+#data/final_features.csv
+
+# Environment / local secrets
+.env
+
+# Local databases
+*.sqlite
