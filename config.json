@@ -1,0 +1,14 @@
+{
+  "paths": {
+    "raw_data": "data/customer_churn_data.csv",
+    "cleaned_data": "data/cleaned_customer_data.csv",
+    "analysis_notebook": "notebooks/data_analysis.ipynb",
+    "main_notebook": "notebooks/main.ipynb",
+    "sql_file": "sql/customer_churn_analysis.sql",
+    "powerbi_dashboard": "powerbi/customer_churn_dashboard.pbix",
+    "analysis_doc": "docs/analysis.md",
+    "modeling_doc": "docs/modeling_analysis.md",
+    "modeling_notebook": "modeling/modeling.ipynb",
+    "clustering_notebook": "modeling/clustering.ipynb"
+  }
+}
