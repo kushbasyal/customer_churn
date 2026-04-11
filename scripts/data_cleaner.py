@@ -1,62 +1,65 @@
+class DataCleaner:
 
-from dataloader import load_data
+    def __init__(self, df):
+        self.df = df
 
-def inspect_data(df):
-    '''Inspect dataset for duplicates, missing values, and shape'''
-    if df is not None:
-        print(f"Shape: {df.shape}")
-        print(f"Duplicates: {df.duplicated().sum()}")
-        print(f"Missing Values:\n{df.isna().sum()}")
-        print(f"Total Missing: {df.isna().sum().sum()}")
-        print(f"First 5 rows:\n{df.head()}")
-        return df
-    else:
-        print("No dataframe to inspect")
-        return None
-    
-def clean_data(df):
-    '''
-    clean the customer churn dataset:
-    strip column names
-    removed duplicates
-    handle missing values
-    '''
-    if df is not None:
-        # Strip spaces from column names
-        df.columns = df.columns.str.strip()
+    # =========================
+    # 1. INSPECT DATA
+    # =========================
+    def inspect_data(self):
+        if self.df is not None:
 
-        # Remove duplicates
-        df = df.drop_duplicates()
+            print(f"\n Shape: {self.df.shape}")
+            print(f"🔁 Duplicates: {self.df.duplicated().sum()}")
 
-        # Separate numerical and categorical columns
-        numerical_columns = df.select_dtypes(include = 'number').columns
-        categorical_columns = df.select_dtypes(include = 'object').columns
+            print("\n Missing Values:")
+            print(self.df.isna().sum())
 
-        # fill the missing values in numerical columns with mean
-        for col in numerical_columns:
-            df[col] = df[col].fillna(df[col].mean())
+            print(f"\n Total Missing: {self.df.isna().sum().sum()}")
 
-        # fill the missing values in categorical columns with mode(or 'Unknown)
-        for col in categorical_columns:
-            if len(df[col].mode()) > 0:  # Check if mode exists
-                df[col] = df[col].fillna(df[col].mode()[0])
-            else:
-                df[col] = df[col].fillna('Unknown')
-        print("Data Cleaned sucessfully")
-        return df
-    else:
-        print("No dataframe to clean")
-        return None
-    
-# Load data and visuals
-df = load_data()
-if df is not None:
-    print("\n🔍 BEFORE CLEANING:")
-    inspect_data(df)
-    
-    df = clean_data(df)
-    
-    print("\n✨ AFTER CLEANING:")
-    inspect_data(df)
-else:
-    print("Failed to load data")
+            print("\n Data Types:")
+            print(self.df.dtypes)
+
+            print("\n🔍 First 5 rows:")
+            print(self.df.head())
+
+            return self.df
+
+        else:
+            print(" No data to inspect")
+            return None
+
+    # =========================
+    # 2. CLEAN DATA
+    # =========================
+    def clean_data(self):
+        if self.df is not None:
+
+            # 1. Strip column names
+            self.df.columns = self.df.columns.str.strip()
+
+            # 2. Remove duplicates
+            self.df = self.df.drop_duplicates()
+
+            # 3. Separate columns
+            numerical_columns = self.df.select_dtypes(include='number').columns
+            categorical_columns = self.df.select_dtypes(include='object').columns
+
+            # 4. Fill numeric missing → mean
+            for col in numerical_columns:
+                self.df[col] = self.df[col].fillna(self.df[col].mean())
+
+            # 5. Fill categorical missing → "Unknown"
+            for col in categorical_columns:
+                if len(self.df[col].mode()) > 0:
+                    self.df[col] = self.df[col].fillna(self.df[col].mode()[0])
+                else:
+                    self.df[col] = self.df[col].fillna("Unknown")
+
+            print(" Data cleaned successfully")
+
+            return self.df
+
+        else:
+            print(" No data to clean")
+            return None
