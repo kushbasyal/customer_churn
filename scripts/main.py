@@ -4,6 +4,8 @@ from feature_engineering import FeatureEngineer
 from churn_model import ChurnModel
 from config_paths import RAW_DATA_PATH
 
+from clustering import ElbowMethod, SilhouetteMethod
+
 
 def main():
 
@@ -24,14 +26,14 @@ def main():
         print("\n✅ Cleaned Data:")
         print(clean_df.head())
 
-        # 3. Feature Engineering (drop columns etc.)
+        # 3. Feature Engineering
         fe = FeatureEngineer(clean_df)
         model_df = fe.create_features()
 
         print("\n🚀 Model Data (after feature engineering):")
         print(model_df.head())
 
-        # 4. Model Training (USE model_df ONLY)
+        # 4. Model Training
         model = ChurnModel(model_df)
 
         model.prepare_data()
@@ -40,7 +42,7 @@ def main():
         model.train_models()
         model.evaluate_xgboost()
 
-        # 5. Prediction Example
+        # 5. Prediction
         result = model.predict_risk({
             'tenure': 52,
             'monthly_charges': 54.20,
@@ -54,6 +56,20 @@ def main():
 
         print("\n🔮 Prediction Result:")
         print(result)
+
+        # 6. 📊 Clustering (AFTER prediction)
+        print("\n📊 Clustering Analysis (Tenure + Monthly Charges):")
+
+        # only selected features
+        X_cluster = model_df[['tenure', 'monthly_charges']].copy()
+
+        # Elbow Method
+        elbow = ElbowMethod(X_cluster)
+        elbow.run(k_range=range(1, 11))
+
+        # Silhouette Score
+        sil = SilhouetteMethod(X_cluster)
+        sil.run(k_range=range(2, 11))
 
     else:
         print("❌ Data not loaded")
